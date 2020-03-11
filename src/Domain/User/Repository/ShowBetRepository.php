@@ -30,8 +30,8 @@ class ShowBetRepository
     {
         $stmt = "SELECT * FROM beerbets";
 
-        $query = $this->connection->prepare($stmt)->execute();
-
+        $query = $this->connection->prepare($stmt);
+        $query->execute();
         $result = $query->fetchAll();
 
         return $result;

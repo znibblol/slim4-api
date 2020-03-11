@@ -1,8 +1,7 @@
 <?php
 namespace App\Action;
 
-use App\Domain\User\Repository;
-use App\Domain\User\Repository\ShowBetRepository;
+use App\Domain\User\Service\BetGetter;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 
@@ -12,38 +11,27 @@ final class ShowBetsAction
 {
     private $showBets;
     
-    // public function __construct($showBets)
-    // {
-    //     $this->showBets = $showBets;
-    // }
+    public function __construct(BetGetter $showBets)
+    {
+        $this->showBets = $showBets;
+    }
 
     
 
     public function __invoke(ServerRequest $request, Response $response): Response
     {
+        $betArr = $this->showBets->showBets();
 
-
-        $test = new ShowBetRepository($request);
-        // $arr = [
-        //     [
-        //         'bet_id'            => '1',
-        //         'bet_placer'        => 'Emil',
-        //         'bet_description'   => 'Detta är ett test bet, det finns inte egentligen',
-        //         'bet_takers'        => unserialize('a:4:{i:0;s:6:"Oeberg";i:1;s:5:"Jonas";i:2;s:5:"Oskar";i:3;s:5:"Henke";}'),
-        //         'bet_secret'        => 0,
-        //     ],
-        //     [
-        //         'bet_id'            => '2',
-        //         'bet_placer'        => 'Emil',
-        //         'bet_description'   => 'Detta är ett test bet, det finns inte egentligen',
-        //         'bet_takers'        => unserialize('a:4:{i:0;s:6:"Oeberg";i:1;s:5:"Jonas";i:2;s:5:"Oskar";i:3;s:5:"Henke";}'),
-        //         'bet_secret'        => 1,                
-        //     ]
-        // ];
-
-        print_r($test->getBets());exit;
-
-
-        return $response->withJson($arr)->withStatus(200);
+        echo '<pre>';
+        foreach($betArr as $key) {
+            foreach($key as $test => $val) {
+                if($test == 'bet_takers') {
+                    $val = unserialize($val);
+                }
+            }
+        }
+        print_r($betArr);
+        exit;
+        return $response->withJson($betArr)->withStatus(200);
     }
 }
