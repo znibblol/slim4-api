@@ -6,9 +6,17 @@ use Slim\Http\ServerRequest;
 
 final class HomeAction
 {
+
+    public $takers = ['Oeberg', 'Jonas', 'Oskar', 'Henke'];
+
     public function __invoke(ServerRequest $request, Response $response): Response
     {
-        $response->getBody()->write('Hello this is documentaion');
+
+        $theArr = serialize($this->takers);
+
+        $response->getBody()->write($theArr);
+
+
 
         return $response;
 
